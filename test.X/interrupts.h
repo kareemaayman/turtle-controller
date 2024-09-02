@@ -36,12 +36,11 @@
 // interrupts.h
 #ifndef INTERRUPTS_H
 #define INTERRUPTS_H
-#include <stdint.h>  // Include standard integer types
-extern volatile uint16_t pulse_count;
-extern volatile uint8_t calculate_speed_flag;
-extern volatile uint16_t rpm;
 
-void INTERRUPTS_init(void);
+#include <stdint.h>     
+void init_interrupts(void);
+
+
 
 #endif
 
