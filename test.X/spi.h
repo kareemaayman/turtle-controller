@@ -37,8 +37,9 @@
 #ifndef SPI_H
 #define SPI_H
 
-void SPI_init(void);
-void SPI_send(uint16_t data);
+#include <stdint.h> 
+void init_spi(void);
+void spi_transmit(uint8_t data);
 
 #endif
 #endif	/* XC_HEADER_TEMPLATE_H */
