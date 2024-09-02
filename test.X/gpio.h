@@ -36,7 +36,8 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-void GPIO_init(void);
+#include <stdint.h> 
+void init_gpio(void);
 
 #endif
 #endif	/* XC_HEADER_TEMPLATE_H */
