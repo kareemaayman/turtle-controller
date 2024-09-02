@@ -37,9 +37,10 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-void TIMER_init(void);
-void TIMER1_init(void);
-void TIMER_setPWM(uint8_t dutyCycle);
+#include <stdint.h> 
+void init_pwm(void);
+void set_pwm_duty_cycle(uint8_t duty_cycle);
+
 
 #endif
 
