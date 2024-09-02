@@ -9,25 +9,17 @@
 #include <xc.h>
 
 // timer.c
-#include <avr/io.h>
 #include "timer.h"
+#include <avr/io.h>
 
-void TIMER_init(void) {
-    // Configure Timer/Counter for Fast PWM mode
-    TCCR0A |= (1 << WGM00) | (1 << WGM01);
-    TCCR0A |= (1 << COM0A1); // Clear OC0A on Compare Match
-    TCCR0B |= (1 << CS01) | (1 << CS00); // Prescaler 64
-    DDRD |= (1 << PD6) | (1 << PD5); // Set OC0A (PD6) and OC0B (PD5) as outputs
-}
-void TIMER1_init(void){
-    // Configure Timer1 for CTC mode
-    TCCR1B |= (1 << WGM12);  // CTC mode
-    TCCR1B |= (1 << CS11) | (1 << CS10); // Prescaler 64
-    OCR1A = 12500 - 1; // Set compare value for 1-second interval assuming 8 MHz clock
-    TIMSK1 |= (1 << OCIE1A); // Enable Timer1 compare interrupt
+void init_pwm(void) {
+    // Set fast PWM mode on Timer1 with non-inverted output
+    TCCR1A = (1 << COM1A1) | (1 << WGM11);
+    TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS11); // Prescaler of 8
+    ICR1 = 19999; // Set TOP value for 20ms period (50Hz)
 }
 
-void TIMER_setPWM(uint8_t dutyCycleA, uint8_t dutyCycleB) {
-    OCR0A = dutyCycleA; // Set duty cycle for ENB (PD6)
-    OCR0B = dutyCycleB; // Set duty cycle for ENA (PD5)
+void set_pwm_duty_cycle(uint8_t duty_cycle) {
+    OCR1A = (duty_cycle / 100.0) * ICR1; // Set PWM duty cycle
 }
+
