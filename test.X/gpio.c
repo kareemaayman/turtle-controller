@@ -8,13 +8,12 @@
 
 #include <xc.h>
 
-// gpio.c
-#include <avr/io.h>
 #include "gpio.h"
+#include <avr/io.h>
 
-void GPIO_init(void) {
-    // Configure motor control pins as output
-    DDRD |= (1 << PD0) | (1 << PD1); // Example for Motor Direction Control
-    // Configure encoder and potentiometer pins as input
-    DDRC &= ~(1 << PC0); // Example for Potentiometer
+void init_gpio(void) {
+    // Set up motor control pins as output
+    DDRB |= (1 << PB1); // Example: Setting PB1 as output for PWM
 }
+
+
