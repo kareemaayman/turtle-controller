@@ -8,35 +8,30 @@
 
 #include <xc.h>
 
-#include <avr/io.h>
+#include <stdint.h> 
 #include "gpio.h"
 #include "adc.h"
 #include "timer.h"
-#include "interrupts.h"
+#include "interrupt.h"
 #include "spi.h"
+#include "motor.h"
 
 int main(void) {
-    // Initialize peripherals
-    GPIO_init();
-    ADC_init();
-    TIMER_init();        // Timer0 for PWM
-    TIMER1_init();       // Timer1 for RPM calculation
-    INTERRUPTS_init();   // External interrupts for encoder
-    SPI_init();          // SPI for communication
-    
+    init_gpio();
+    init_adc();
+    init_pwm();
+    init_interrupts();
+    init_spi();
+
     while (1) {
-        // Read potentiometer value
-        uint16_t potValue = ADC_read(0);  // Read from ADC channel 0 (assuming potentiometer is connected to it)
-        uint8_t pwmValue = potValue / 4;  // Scale to 8-bit value (assuming 10-bit ADC)
-        
-        // Set PWM value to control motor speed
-       TIMER_setPWM(pwmValue, pwmValue); // Set both motors to the same speed (for example)
-      
-        // Check if it's time to process a new RPM value
-        if (calculate_speed_flag) {
-            calculate_speed_flag = 0;  // Clear the flag
-            SPI_send(rpm);  // Send the RPM value over SPI
-            // You can also use the rpm value for further motor control logic
-        }
+        uint16_t adc_value = read_adc(0); // Read potentiometer
+        uint8_t speed = (adc_value / 1023.0) * 100; // Convert to percentage
+        set_pwm_duty_cycle(speed); // Control motor speed
+
+        // Assume RPM calculation based on pulse_count is done here
+        uint8_t rpm = calculate_rpm(); // Pseudo function
+        spi_transmit(rpm); // Send RPM via SPI
     }
 }
+
+
