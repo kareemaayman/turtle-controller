@@ -9,16 +9,17 @@
 #include <xc.h>
 
 // spi.c
-#include <avr/io.h>
 #include "spi.h"
+#include <avr/io.h>
 
-void SPI_init(void) {
-    // Set MOSI and SCK as output
-    DDRB |= (1 << PB3) | (1 << PB5);
-    SPCR |= (1 << SPE) | (1 << MSTR); // Enable SPI in Master mode
+void init_spi(void) {
+    // Set MOSI and SCK as output, all others as input
+    DDRB = (1 << PB3) | (1 << PB5);
+    SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0); // Enable SPI, Master, set clock rate fck/16
 }
 
-void SPI_send(uint16_t data) {
-    SPDR = data; // Load data into the buffer
-    while(!(SPSR & (1 << SPIF))); // Wait until transmission is complete
+void spi_transmit(uint8_t data) {
+    SPDR = data; // Start transmission
+    while(!(SPSR & (1 << SPIF))); // Wait for transmission to complete
 }
+
