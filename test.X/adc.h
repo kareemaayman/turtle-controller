@@ -36,8 +36,9 @@
 #ifndef ADC_H
 #define ADC_H
 
-void ADC_init(void);
-uint16_t ADC_read(uint8_t channel);
+#include <stdint.h> 
+void init_adc(void);
+uint16_t read_adc(uint8_t channel);
 
 #endif
 
